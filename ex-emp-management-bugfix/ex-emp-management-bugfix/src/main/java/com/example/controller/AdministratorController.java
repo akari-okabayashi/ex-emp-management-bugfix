@@ -75,7 +75,7 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result,RedirectAttributes redirectAttributes, Model model) {
 		if (result.hasErrors()) {
 			return toInsert(model, form);
 		}
@@ -88,6 +88,9 @@ public class AdministratorController {
 		BeanUtils.copyProperties(form, administrator);
 		//administratorServiceのinsertメソッドを呼び出す
 		administratorService.insert(administrator);
+		//1-4 ダブルサブミット対策
+		redirectAttributes.addFlashAttribute("successMessage", "登録が完了しました");
+		// ログイン画面にリダイレクト
 		return "redirect:/";
 	}
 
@@ -122,7 +125,6 @@ public class AdministratorController {
 
         Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
         if (administrator == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
             return "redirect:/";
         }
 		session.setAttribute("administratorName", administrator.getName());
