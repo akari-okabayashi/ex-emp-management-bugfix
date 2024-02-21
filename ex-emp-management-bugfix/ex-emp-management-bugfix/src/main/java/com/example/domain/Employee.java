@@ -26,7 +26,7 @@ public class Employee {
 	/** 電話番号 */
 	private String telephone;
 	/** 給料 */
-	private Integer salary;
+	private String salary;
 	/** 特性 */
 	private String characteristics;
 	/** 扶養人数 */
@@ -55,7 +55,7 @@ public class Employee {
 	 * @param dependentsCount 扶養人数
 	 */
 	public Employee(Integer id, String name, String image, String gender, String hireDate, String mailAddress,
-			String zipCode, String address, String telephone, Integer salary, String characteristics,
+			String zipCode, String address, String telephone, String salary, String characteristics,
 			Integer dependentsCount) {
 		super();
 		this.id = id;
@@ -144,11 +144,11 @@ public class Employee {
 		this.telephone = telephone;
 	}
 
-	public Integer getSalary() {
+	public String getSalary() {
 		return salary;
 	}
 
-	public void setSalary(Integer salary) {
+	public void setSalary(String salary) {
 		this.salary = salary;
 	}
 

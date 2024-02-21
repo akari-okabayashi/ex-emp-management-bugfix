@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import java.sql.Date;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -34,11 +35,7 @@ public class EmployeeRepository {
 		employee.setImage(rs.getString("image"));
 		employee.setGender(rs.getString("gender"));
 		//(4-1)初級 日付フォーマット
-		// Date hireDate = rs.getDate("hire_date");
-		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
-		// employee.setHireDate(rs.getDate(hireDate.format(formatter)));
 		Date hireDate = rs.getDate("hire_date");
-		
 			if (hireDate != null) {
     			LocalDate localDate = hireDate.toLocalDate();
     			String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
@@ -52,7 +49,13 @@ public class EmployeeRepository {
 		employee.setZipCode(rs.getString("zip_code"));
 		employee.setAddress(rs.getString("address"));
 		employee.setTelephone(rs.getString("telephone"));
-		employee.setSalary(rs.getInt("salary"));
+
+		//(4-2)初級 価格フォーマット
+		int salary = rs.getInt("salary");
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		String formattedSalary = numberFormat.format(salary);
+		employee.setSalary(formattedSalary);
+
 		employee.setCharacteristics(rs.getString("characteristics"));
 		employee.setDependentsCount(rs.getInt("dependents_count"));
 		
