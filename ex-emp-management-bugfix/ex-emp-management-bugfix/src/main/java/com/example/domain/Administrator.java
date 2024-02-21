@@ -42,7 +42,6 @@ public class Administrator {
 		this.name = form.getName();
 		this.mailAddress = form.getMailAddress();
 		this.password = form.getPassword();
-	
 	}
 
 	public Integer getId() {

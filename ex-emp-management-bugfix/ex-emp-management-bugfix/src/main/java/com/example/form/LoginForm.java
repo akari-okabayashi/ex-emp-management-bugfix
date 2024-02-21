@@ -17,6 +17,8 @@ public class LoginForm {
 	@NotEmpty(message = "パスワードを入力してください")
 	private String password;
 
+	
+
 	public String getMailAddress() {
 		return mailAddress;
 	}
