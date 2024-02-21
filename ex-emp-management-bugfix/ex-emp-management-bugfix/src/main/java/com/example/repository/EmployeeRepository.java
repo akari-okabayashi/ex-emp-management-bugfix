@@ -1,5 +1,8 @@
 package com.example.repository;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +33,21 @@ public class EmployeeRepository {
 		employee.setName(rs.getString("name"));
 		employee.setImage(rs.getString("image"));
 		employee.setGender(rs.getString("gender"));
-		employee.setHireDate(rs.getDate("hire_date"));
+		//(4-1)初級 日付フォーマット
+		// Date hireDate = rs.getDate("hire_date");
+		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+		// employee.setHireDate(rs.getDate(hireDate.format(formatter)));
+		Date hireDate = rs.getDate("hire_date");
+		
+			if (hireDate != null) {
+    			LocalDate localDate = hireDate.toLocalDate();
+    			String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy年MM月dd日"));
+    			employee.setHireDate(formattedDate);
+			} else {
+    			// hire_dateがnullの場合の処理を追加するか、デフォルト値を設定するなど適切な処理を行う
+    			employee.setHireDate(null);
+			}
+
 		employee.setMailAddress(rs.getString("mail_address"));
 		employee.setZipCode(rs.getString("zip_code"));
 		employee.setAddress(rs.getString("address"));
@@ -38,6 +55,7 @@ public class EmployeeRepository {
 		employee.setSalary(rs.getInt("salary"));
 		employee.setCharacteristics(rs.getString("characteristics"));
 		employee.setDependentsCount(rs.getInt("dependents_count"));
+		
 		return employee;
 	};
 
@@ -54,7 +72,7 @@ public class EmployeeRepository {
 			SELECT id,name,image,gender,hire_date,mail_address,zip_code,
 				address,telephone,salary,characteristics,dependents_count 
 			FROM employees
-			ORDER BY hire_date
+			ORDER BY hire_date;
 				""";
 
 		List<Employee> developmentList = template.query(sql, EMPLOYEE_ROW_MAPPER);

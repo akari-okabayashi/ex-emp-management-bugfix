@@ -1,7 +1,5 @@
 package com.example.domain;
 
-import java.util.Date;
-
 /**
  * 従業員情報を表すドメイン.
  * 
@@ -18,7 +16,7 @@ public class Employee {
 	/** 性別 */
 	private String gender;
 	/** 入社日 */
-	private Date hireDate;
+	private String hireDate;
 	/** メールアドレス */
 	private String mailAddress;
 	/** 郵便番号 */
@@ -56,7 +54,7 @@ public class Employee {
 	 * @param characteristics 特性
 	 * @param dependentsCount 扶養人数
 	 */
-	public Employee(Integer id, String name, String image, String gender, Date hireDate, String mailAddress,
+	public Employee(Integer id, String name, String image, String gender, String hireDate, String mailAddress,
 			String zipCode, String address, String telephone, Integer salary, String characteristics,
 			Integer dependentsCount) {
 		super();
@@ -106,11 +104,11 @@ public class Employee {
 		this.gender = gender;
 	}
 
-	public Date getHireDate() {
+	public String getHireDate() {
 		return hireDate;
 	}
 
-	public void setHireDate(Date hireDate) {
+	public void setHireDate(String hireDate) {
 		this.hireDate = hireDate;
 	}
 
