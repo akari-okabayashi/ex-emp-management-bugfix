@@ -121,6 +121,24 @@
                         th:errorclass="error-input"
                         value="xxxxxxxx"
                       />
+                      <!-- 確認用パスワード -->
+                      <label for="confirmPassword"> パスワード(確認): </label>
+                      <label
+                        th:errors="*{confirmPassword}"
+                        class="error-messages"
+                      >
+                        パスワードを入力してください
+                      </label>
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        class="form-control"
+                        placeholder="password"
+                        th:field="*{confirmPassword}"
+                        th:errorclass="error-input"
+                        value="xxxxxxxx"
+                      />
                     </div>
                   </div>
                 </div>
