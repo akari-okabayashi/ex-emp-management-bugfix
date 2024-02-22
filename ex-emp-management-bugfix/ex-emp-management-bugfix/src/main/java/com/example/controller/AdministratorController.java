@@ -39,14 +39,11 @@ public class AdministratorController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 
 	public AdministratorController() {
 	}
-
-	@Autowired
-	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
+	
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -92,7 +89,7 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert(model, form);
 		}
-		if(administratorService.isMailAddressExists(form.getMailAddress())) {
+		if(administratorService.findByMailAddress(form.getMailAddress()) != null) {
 			result.rejectValue("mailAddress", "error.mailAddress", "既に登録されているメールアドレスです");
 			return toInsert(model, form);
 		}
@@ -143,23 +140,21 @@ public class AdministratorController {
             return toLogin(model, form);
         }
 
-        Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-        if (administrator == null) {
-            return "redirect:/";
-        }
-		session.setAttribute("administratorName", administrator.getName());
-		//administratorServiceのisMailAddressExistsメソッドを呼び出す
-		boolean exists = administratorService.isMailAddressExists(form.getMailAddress());
-			if(!exists) {
-				result.rejectValue("mailAddress", "error.mailAddress", "登録されていないメールアドレスです");
-				
-				if(!passwordEncoder.matches(form.getPassword(), administrator.getPassword())) {
-					result.rejectValue("password", "error.password", "パスワードが一致しません");
-					return toLogin(model, form);
-				}
-				return toLogin(model, form);
-			}
+		Administrator administrator = administratorService.findByMailAddress(form.getMailAddress());
+		if (administrator == null) {
+			result.rejectValue("mailAddress", "error.mailAddress", "メールアドレスが存在しません");
+			return toLogin(model, form);
+		}
+			// System.out.println(administrator.getPassword());
+		System.out.println(passwordEncoder.encode(form.getPassword()));
+
+		if(passwordEncoder.matches(form.getPassword(), administrator.getPassword())) {
+			session.setAttribute("administratorName", administrator.getName());
 			return "redirect:/employee/showList";
+		} else {
+			result.rejectValue("password", "error.password", "パスワードが一致しません");
+			return toLogin(model, form);
+		}
     }
 
 	/////////////////////////////////////////////////////

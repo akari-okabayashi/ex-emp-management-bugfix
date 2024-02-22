@@ -89,8 +89,8 @@ public class AdministratorRepository {
 	 */
 
 	public void insert(Administrator administrator) {
-		String hashedPassword = passwordEncoder.encode(administrator.getPassword());
-		administrator.setPassword(hashedPassword);
+		// String hashedPassword = passwordEncoder.encode(administrator.getPassword());
+		// administrator.setPassword(hashedPassword);
 
 		SqlParameterSource param = new BeanPropertySqlParameterSource(administrator);
 		String sql = """

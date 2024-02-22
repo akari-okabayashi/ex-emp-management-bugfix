@@ -27,11 +27,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                // .anyRequest().permitAll()
+                
                 .requestMatchers("/css/**").permitAll()
                 .requestMatchers("/js/**").permitAll()
                 .requestMatchers("/img/**").permitAll()
                 .requestMatchers("//**", "/toInsert/**","/insert/**","/login/**","/employee/**").permitAll()
-
             );
         return http.build();
     }

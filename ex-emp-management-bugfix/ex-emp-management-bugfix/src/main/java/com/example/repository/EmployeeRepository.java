@@ -118,4 +118,14 @@ public class EmployeeRepository {
 				""";
 		template.update(updateSql, param);
 	}
+	/**
+	 * 従業員情報を名前で検索します.
+	 * @param name
+	 * @return
+	 */
+	public List<Employee> findByName(String name) {
+        String sql = "SELECT * FROM employees WHERE name LIKE :name";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+        return template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+    }
 }
