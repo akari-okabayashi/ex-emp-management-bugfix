@@ -1,7 +1,9 @@
 package com.example.controller;
 
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,17 @@ public class AdministratorController {
 
 	@Autowired
 	private HttpSession session;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	// public AdministratorController() {
+	// }
+
+	// @Autowired
+	// public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+	// 	this.passwordEncoder = passwordEncoder;
+	// }
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -91,6 +104,8 @@ public class AdministratorController {
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
+		// パスワードをハッシュ化
+		administrator.setPassword(passwordEncoder.encode(form.getPassword()));
 		//administratorServiceのinsertメソッドを呼び出す
 		administratorService.insert(administrator);
 		//1-4 ダブルサブミット対策
@@ -132,6 +147,7 @@ public class AdministratorController {
         if (administrator == null) {
             return "redirect:/";
         }
+		// String encoded = this.passwordEncoder.encode(form.getPassword());
 		session.setAttribute("administratorName", administrator.getName());
 		return "redirect:/employee/showList";
     }
