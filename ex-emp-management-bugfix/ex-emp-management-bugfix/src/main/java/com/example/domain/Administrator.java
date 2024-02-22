@@ -1,5 +1,8 @@
 package com.example.domain;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.example.form.InsertAdministratorForm;
 
 /**
@@ -9,6 +12,9 @@ import com.example.form.InsertAdministratorForm;
  * 
  */
 public class Administrator {
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	/** id(主キー) */
 	private Integer id;
 	/** 名前 */
@@ -41,7 +47,7 @@ public class Administrator {
 	public Administrator(InsertAdministratorForm form) {
 		this.name = form.getName();
 		this.mailAddress = form.getMailAddress();
-		this.password = form.getPassword();
+		this.password = passwordEncoder.encode(form.getPassword());
 	}
 
 	public Integer getId() {

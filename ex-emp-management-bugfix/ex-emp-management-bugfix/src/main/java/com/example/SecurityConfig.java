@@ -30,7 +30,8 @@ public class SecurityConfig {
                 .requestMatchers("/css/**").permitAll()
                 .requestMatchers("/js/**").permitAll()
                 .requestMatchers("/img/**").permitAll()
-                .requestMatchers("//**", "/toInsert/**","/insert/**","/login/**","/employee/**","/logout").permitAll()
+                .requestMatchers("//**", "/toInsert/**","/insert/**","/login/**","/employee/**").permitAll()
+
             );
         return http.build();
     }

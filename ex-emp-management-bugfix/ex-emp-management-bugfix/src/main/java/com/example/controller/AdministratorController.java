@@ -40,13 +40,13 @@ public class AdministratorController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	// public AdministratorController() {
-	// }
+	public AdministratorController() {
+	}
 
-	// @Autowired
-	// public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-	// 	this.passwordEncoder = passwordEncoder;
-	// }
+	@Autowired
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -147,9 +147,19 @@ public class AdministratorController {
         if (administrator == null) {
             return "redirect:/";
         }
-		// String encoded = this.passwordEncoder.encode(form.getPassword());
 		session.setAttribute("administratorName", administrator.getName());
-		return "redirect:/employee/showList";
+		//administratorServiceのisMailAddressExistsメソッドを呼び出す
+		boolean exists = administratorService.isMailAddressExists(form.getMailAddress());
+			if(!exists) {
+				result.rejectValue("mailAddress", "error.mailAddress", "登録されていないメールアドレスです");
+				
+				if(!passwordEncoder.matches(form.getPassword(), administrator.getPassword())) {
+					result.rejectValue("password", "error.password", "パスワードが一致しません");
+					return toLogin(model, form);
+				}
+				return toLogin(model, form);
+			}
+			return "redirect:/employee/showList";
     }
 
 	/////////////////////////////////////////////////////

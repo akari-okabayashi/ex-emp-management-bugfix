@@ -1,7 +1,5 @@
 package com.example.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -47,17 +45,15 @@ public class AdministratorService {
 		return administrator;
 	}
 
+	/**
+	 * メールアドレスが存在するか確認します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 存在する場合はtrue、存在しない場合はfalse
+	 */
+
 	public boolean isMailAddressExists(String mailAddress) {
 		return administratorRepository.findByMailAddress(mailAddress) != null;
 	}
-
-    public void updateAdministrator(Administrator administrator) {
-        throw new UnsupportedOperationException("Unimplemented method 'updateAdministrator'");
-    }
-
-    public List<Administrator> getAllAdministrators() {
-        throw new UnsupportedOperationException("Unimplemented method 'getAllAdministrators'");
-    }
-
 
 }	
