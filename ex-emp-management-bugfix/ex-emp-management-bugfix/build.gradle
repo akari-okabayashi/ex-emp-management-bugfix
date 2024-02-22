@@ -25,3 +25,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-security"
+}
+ext['spring-security.version']='6.2.2'
+ext['spring.version']='6.1.4'
