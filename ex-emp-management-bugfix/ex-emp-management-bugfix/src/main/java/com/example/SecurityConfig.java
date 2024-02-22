@@ -28,11 +28,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 // .anyRequest().permitAll()
-                
                 .requestMatchers("/css/**").permitAll()
                 .requestMatchers("/js/**").permitAll()
                 .requestMatchers("/img/**").permitAll()
-                .requestMatchers("//**", "/toInsert/**","/insert/**","/login/**","/employee/**").permitAll()
+                .requestMatchers("/**").permitAll()
             );
         return http.build();
     }

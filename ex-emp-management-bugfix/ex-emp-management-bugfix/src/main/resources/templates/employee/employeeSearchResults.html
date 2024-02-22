@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Search Results</title>
+</head>
+<body>
+    <h3>Employee 検索結果</h3>
+    
+    <!-- 検索フォーム -->
+    <form th:action="@{/employee/search}" method="get">
+        <input type="text" name="name" placeholder="従業員名で検索">
+        <button type="submit">検索</button>
+    </form>
+    
+    <!-- 検索結果メッセージ -->
+    <p th:text="${message}"></p>
+    
+    <!-- 検索結果表示 -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名前</th>
+                <th>役職</th>
+                <!-- 必要に応じて他のカラムを追加 -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.position}"></td>
+                <!-- 必要に応じて他のカラムを追加 -->
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
