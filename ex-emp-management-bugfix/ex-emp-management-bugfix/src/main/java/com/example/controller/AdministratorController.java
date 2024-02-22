@@ -1,7 +1,9 @@
 package com.example.controller;
 
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,14 @@ public class AdministratorController {
 
 	@Autowired
 	private HttpSession session;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+
+	public AdministratorController() {
+	}
+	
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -79,7 +89,7 @@ public class AdministratorController {
 		if (result.hasErrors()) {
 			return toInsert(model, form);
 		}
-		if(administratorService.isMailAddressExists(form.getMailAddress())) {
+		if(administratorService.findByMailAddress(form.getMailAddress()) != null) {
 			result.rejectValue("mailAddress", "error.mailAddress", "既に登録されているメールアドレスです");
 			return toInsert(model, form);
 		}
@@ -91,6 +101,8 @@ public class AdministratorController {
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
+		// パスワードをハッシュ化
+		administrator.setPassword(passwordEncoder.encode(form.getPassword()));
 		//administratorServiceのinsertメソッドを呼び出す
 		administratorService.insert(administrator);
 		//1-4 ダブルサブミット対策
@@ -128,12 +140,21 @@ public class AdministratorController {
             return toLogin(model, form);
         }
 
-        Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-        if (administrator == null) {
-            return "redirect:/";
-        }
-		session.setAttribute("administratorName", administrator.getName());
-		return "redirect:/employee/showList";
+		Administrator administrator = administratorService.findByMailAddress(form.getMailAddress());
+		if (administrator == null) {
+			result.rejectValue("mailAddress", "error.mailAddress", "メールアドレスが存在しません");
+			return toLogin(model, form);
+		}
+			// System.out.println(administrator.getPassword());
+		System.out.println(passwordEncoder.encode(form.getPassword()));
+
+		if(passwordEncoder.matches(form.getPassword(), administrator.getPassword())) {
+			session.setAttribute("administratorName", administrator.getName());
+			return "redirect:/employee/showList";
+		} else {
+			result.rejectValue("password", "error.password", "パスワードが一致しません");
+			return toLogin(model, form);
+		}
     }
 
 	/////////////////////////////////////////////////////

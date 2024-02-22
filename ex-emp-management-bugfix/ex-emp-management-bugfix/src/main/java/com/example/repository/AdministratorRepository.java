@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Administrator;
@@ -20,6 +21,9 @@ import com.example.domain.Administrator;
  */
 @Repository
 public class AdministratorRepository {
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/**
 	 * Administratorオブジェクトを生成するローマッパー.
@@ -80,8 +84,14 @@ public class AdministratorRepository {
 	 * 管理者情報を挿入します.
 	 * 
 	 * @param administrator 管理者情報
+	 * @return 挿入した件数
+	 * @throws DataAccessException 一意制約に違反した場合(メールアドレスが重複している場合)は例外を発生します
 	 */
+
 	public void insert(Administrator administrator) {
+		// String hashedPassword = passwordEncoder.encode(administrator.getPassword());
+		// administrator.setPassword(hashedPassword);
+
 		SqlParameterSource param = new BeanPropertySqlParameterSource(administrator);
 		String sql = """
 			insert into administrators
@@ -124,6 +134,4 @@ public class AdministratorRepository {
         }
         return administratorList.get(0);
     }
-
-
 }

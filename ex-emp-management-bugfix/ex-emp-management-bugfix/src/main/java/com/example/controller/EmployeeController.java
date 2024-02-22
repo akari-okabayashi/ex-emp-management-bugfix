@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
@@ -92,4 +93,25 @@ public class EmployeeController {
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
 	}
+	/**
+	 * 従業員を検索します.
+	 * @param name
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/employee/search")
+    public String search(@RequestParam(required = false) String name, Model model) {
+        List<Employee> employees;
+        if (name == null || name.isEmpty()) {
+            employees = employeeService.findAll();
+        } else {
+            employees = employeeService.findByName(name);
+            if (employees.isEmpty()) {
+                model.addAttribute("message", "1件もありませんでした");
+                employees = employeeService.findAll();
+            }
+        }
+        model.addAttribute("employees", employees);
+        return "redirect:/employee/search";
+    }
 }

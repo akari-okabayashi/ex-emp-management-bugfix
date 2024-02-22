@@ -1,7 +1,6 @@
 package com.example.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +26,9 @@ public class AdministratorService {
 	 * @param administrator 管理者情報
 	 */
 	public void insert(Administrator administrator) {
-		if(isMailAddressExists(administrator.getMailAddress())) {
-			throw new DuplicateKeyException("そのメールアドレスは既に登録されています");
-		}
+		// if(isMailAddressExists(administrator.getMailAddress())) {
+		// 	throw new DuplicateKeyException("そのメールアドレスは既に登録されています");
+		// }
 		administratorRepository.insert(administrator);
 	}
 
@@ -45,7 +44,16 @@ public class AdministratorService {
 		return administrator;
 	}
 
-	public boolean isMailAddressExists(String mailAddress) {
-		return administratorRepository.findByMailAddress(mailAddress) != null;
+	/**
+	 * メールアドレスが存在するか確認します.
+	 * 
+	 * @param mailAddress メールアドレス
+	 * @return 存在する場合はtrue、存在しない場合はfalse
+	 */
+
+	public Administrator findByMailAddress(String mailAddress) {
+		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
+		return administrator;
 	}
-}
+
+}	
